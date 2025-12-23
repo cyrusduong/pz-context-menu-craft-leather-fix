@@ -3,6 +3,10 @@
 require("TimedActions/ISBaseTimedAction")
 
 ---@class ISDryItemAction : ISBaseTimedAction
+---@field item InventoryItem
+---@field outputType InventoryItem
+---@field rack IsoObject
+---@field time number
 ISDryItemAction = ISBaseTimedAction:derive("ISDryItemAction")
 
 function ISDryItemAction:isValid()
@@ -34,23 +38,25 @@ end
 function ISDryItemAction:perform()
 	self.item:setJobDelta(0.0)
 
-	local inventory = self.character:getInventory()
-	local outputItem = inventory:AddItem(self.outputType)
+	-- We cannot store getInventory() in an variable since each method call will invalidate it
+	self.character:getInventory():AddItem(self.outputType)
+	self.character:getInventory():Remove(self.item)
 
-	if outputItem then
-		-- Sync item state if necessary (e.g. condition, weight)
-		inventory:Remove(self.item)
-
-		-- Feedback
-		if self.character:isLocalPlayer() then
-			HaloTextHelper.addText(self.character, "Dried Item Created", HaloTextHelper.getColorGreen())
-		end
+	-- Feedback
+	if self.character:isLocalPlayer() then
+		HaloTextHelper.addGoodText(self.character, "Dried Item Created")
 	end
 
 	-- Part of the action queue
 	ISBaseTimedAction.perform(self)
 end
 
+--- @param character IsoPlayer
+--- @param item InventoryItem
+--- @param outputType InventoryItem
+--- @param rack IsoObject
+--- @param time number
+--- @return self
 function ISDryItemAction:new(character, item, outputType, rack, time)
 	local o = {}
 	setmetatable(o, self)

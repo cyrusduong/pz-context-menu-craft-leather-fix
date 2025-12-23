@@ -40,7 +40,7 @@ end
  ---@param rack IsoObject
 function ISDryingRackMenu_Plants.dryPlant(player, plantData, rack)
  	print("[ISDryingRackMenu_Plants] dryPlant called for: " .. tostring(plantData.inputType))
- 	if luautils.walkToAdjacentTile(player, rack:getSquare()) then
+ 	if luautils.walkAdj(player, rack:getSquare()) then
  		ISTimedActionQueue.add(ISDryItemAction:new(player, plantData.item, plantData.outputType, rack, 100))
  	end
  end
@@ -50,10 +50,9 @@ function ISDryingRackMenu_Plants.dryPlant(player, plantData, rack)
  ---@param rack IsoObject
 function ISDryingRackMenu_Plants.dryAll(player, compatiblePlants, rack)
  	print("[ISDryingRackMenu_Plants] dryAll called for " .. #compatiblePlants .. " items")
+	if not luautils.walkAdj(player, rack:getSquare(), true) then return end
  	for _, plantData in ipairs(compatiblePlants) do
- 		if luautils.walkToAdjacentTile(player, rack:getSquare()) then
- 			ISTimedActionQueue.add(ISDryItemAction:new(player, plantData.item, plantData.outputType, rack, 100))
- 		end
+ 		ISTimedActionQueue.add(ISDryItemAction:new(player, plantData.item, plantData.outputType, rack, 100))
  	end
  end
 
@@ -200,9 +199,5 @@ function ISDryingRackMenu_Plants.OnFillWorldObjectContextMenu(player, context, w
  	print("[ISDryingRackMenu_Plants] ===== OnFillWorldObjectContextMenu END =====")
 end
 
-if Events and Events.OnFillWorldObjectContextMenu then
- 	Events.OnFillWorldObjectContextMenu.Add(ISDryingRackMenu_Plants.OnFillWorldObjectContextMenu)
- 	print("[ISDryingRackMenu_Plants] Event handler registered")
-else
- 	print("[ISDryingRackMenu_Plants] WARNING: Events.OnFillWorldObjectContextMenu not available!")
-end
+Events.OnFillWorldObjectContextMenu.Add(ISDryingRackMenu_Plants.OnFillWorldObjectContextMenu)
+print("[ISDryingRackMenu_Plants] Event handler registered")

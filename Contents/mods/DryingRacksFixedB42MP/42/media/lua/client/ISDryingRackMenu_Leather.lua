@@ -1,6 +1,7 @@
 -- Leather Drying Rack Context Menu Implementation
 -- Strictly matches item size to rack size (No cascading)
 
+require('utl')
 require("DryingRackUtils")
 require("DryingRackData_Leather")
 require("TimedActions/ISDryItemAction")
@@ -40,7 +41,7 @@ end
 ---@param rack IsoObject
 function ISDryingRackMenu_Leather.dryLeather(player, wetLeatherData, rack)
 	print("[ISDryingRackMenu_Leather] dryLeather called for: " .. tostring(wetLeatherData.inputType))
-	if luautils.walkToAdjacentTile(player, rack:getSquare()) then
+	if luautils.walkAdj(player, rack:getSquare()) then
 		ISTimedActionQueue.add(ISDryItemAction:new(player, wetLeatherData.item, wetLeatherData.outputType, rack, 100))
 	end
 end
@@ -50,10 +51,9 @@ end
 ---@param rack IsoObject
 function ISDryingRackMenu_Leather.dryAll(player, compatibleLeathers, rack)
 	print("[ISDryingRackMenu_Leather] dryAll called for " .. #compatibleLeathers .. " items")
+	if not luautils.walkAdj(player, rack:getSquare(), true) then return end
 	for _, leatherData in ipairs(compatibleLeathers) do
-		if luautils.walkToAdjacentTile(player, rack:getSquare()) then
-			ISTimedActionQueue.add(ISDryItemAction:new(player, leatherData.item, leatherData.outputType, rack, 100))
-		end
+		ISTimedActionQueue.add(ISDryItemAction:new(player, leatherData.item, leatherData.outputType, rack, 100))
 	end
 end
 
@@ -198,7 +198,7 @@ function ISDryingRackMenu_Leather.OnFillWorldObjectContextMenu(player, context, 
 			for _, leather in ipairs(compatibleLeathers) do
 				local label = leather.item:getName()
 				print("[ISDryingRackMenu_Leather] Adding individual option: " .. label)
-				subMenu:addOption(label, rack, ISDryingRackMenu_Leather.dryLeather, playerObj, leather, rack)
+				subMenu:addOption(label, playerObj, ISDryingRackMenu_Leather.dryLeather, leather, rack)
 			end
 
 			for _, leather in ipairs(incompatibleLeathers) do
@@ -223,9 +223,5 @@ function ISDryingRackMenu_Leather.OnFillWorldObjectContextMenu(player, context, 
 	print("[ISDryingRackMenu_Leather] ===== OnFillWorldObjectContextMenu END =====")
 end
 
-if Events and Events.OnFillWorldObjectContextMenu then
-	Events.OnFillWorldObjectContextMenu.Add(ISDryingRackMenu_Leather.OnFillWorldObjectContextMenu)
-	print("[ISDryingRackMenu_Leather] Event handler registered")
-else
-	print("[ISDryingRackMenu_Leather] WARNING: Events.OnFillWorldObjectContextMenu not available!")
-end
+Events.OnFillWorldObjectContextMenu.Add(ISDryingRackMenu_Leather.OnFillWorldObjectContextMenu)
+print("[ISDryingRackMenu_Leather] Event handler registered")
