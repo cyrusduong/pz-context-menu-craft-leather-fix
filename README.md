@@ -164,8 +164,25 @@ Use the `./publish.sh` script (requires `steamcmd`) to upload updates:
 ./publish.sh
 ```
 
-## Troubleshooting & Logs
+### Multiplayer Support & Synchronization
+This mod is specifically designed for Build 42 Multiplayer and addresses the critical issue of inventory persistence.
 
+**The Sync Challenge:**
+In B42 MP, simply calling `inventory:AddItem()` and `inventory:Remove()` on the client is insufficient. The server maintains its own authoritative record of the player's inventory, and without explicit synchronization, these changes will be rolled back upon a server restart or player relog.
+
+**The Solution:**
+We utilize the `sendReplaceItemInContainer` method within our Timed Actions.
+```lua
+local added = self.character:getInventory():AddItem(self.outputType)
+self.character:getInventory():Remove(self.item)
+sendReplaceItemInContainer(self.character:getInventory(), self.item, added)
+```
+- **Authoritative Swap**: This function explicitly notifies the server that `self.item` (the wet item) has been replaced by `added` (the dry item).
+- **Persistence**: By using this pattern, the server updates its database immediately, ensuring the dried items remain in the player's inventory after a restart.
+- **Reference**: This follows the established B42 pattern seen in vanilla actions like `ISCleanBandage.lua`.
+
+## Troubleshooting & Logs
 If the mod does not appear in the menu or actions fail, check the Project Zomboid console log:
-- **macOS**: `/Users/cduong/Zomboid/console.txt`
+- **macOS (Client)**: `/Users/cduong/Zomboid/console.txt`
+- **macOS (Server/Coop)**: `/Users/cduong/Zomboid/coop-console.txt`
 - **Search for**: `DryingRacksFixedB42MP` or `ERROR: lua`
