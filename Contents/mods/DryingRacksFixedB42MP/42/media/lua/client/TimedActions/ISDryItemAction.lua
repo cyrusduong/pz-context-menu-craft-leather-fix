@@ -38,9 +38,7 @@ end
 function ISDryItemAction:perform()
 	self.item:setJobDelta(0.0)
 	ISBaseTimedAction.perform(self)
-end
 
-function ISDryItemAction:complete()
 	-- We cannot store getInventory() in an variable since each method call will invalidate it
 	local added = self.character:getInventory():AddItem(self.outputType)
 	self.character:getInventory():Remove(self.item)
@@ -61,6 +59,8 @@ function ISDryItemAction:complete()
 		print("[ISDryItemAction] perform - halo text: " .. tostring(itemName) .. " dried")
 		HaloTextHelper.addGoodText(self.character, itemName .. " dried")
 	end
+
+	ISBaseTimedAction.perform(self)
 end
 
 --- @param character IsoPlayer
