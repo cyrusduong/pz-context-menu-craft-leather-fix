@@ -1,6 +1,6 @@
 # DryingRacksFixed B42 MP
 
-![Preview Image](https://raw.githubusercontent.com/cyrusduong/project-zomboid-drying-racks-fixed-b42-mp/main/preview.png)
+![Preview Image](https://raw.githubusercontent.com/cyrusduong/project-zomboid-drying-racks-fixed-b42-mp/main/Contents/mods/DryingRacksFixedB42MP/preview.png)
 ![Leather Drying Rack UI](https://raw.githubusercontent.com/cyrusduong/project-zomboid-drying-racks-fixed-b42-mp/main/media/screenshots/leather_drying_rack_ui.png)
 ![Leather Drying Rack Action](https://raw.githubusercontent.com/cyrusduong/project-zomboid-drying-racks-fixed-b42-mp/main/media/screenshots/leather_drying_rack_action.png)
 
