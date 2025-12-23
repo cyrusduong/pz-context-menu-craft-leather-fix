@@ -21,10 +21,14 @@ function DryingRackUtils.getRackInfo(entity)
 	end
 
 	local spriteName = ""
-	if entity.getSprite and entity:getSprite() then
+	if entity.getSpriteName then
+		spriteName = entity:getSpriteName() or ""
+	elseif entity.getSprite then
 		local sprite = entity:getSprite()
-		if sprite.getName then
+		if sprite and sprite.getName then
 			spriteName = sprite:getName() or ""
+		elseif sprite and sprite.getSprite then
+			spriteName = sprite:getSprite() or ""
 		end
 	end
 
@@ -67,13 +71,12 @@ function DryingRackUtils.getRackInfo(entity)
  		return "plant", "large"
  	end
  
-	-- Fallback: Match on display name prefix (not tile number)
-	-- Tile numbers (21, 22, 236, etc.) change based on world position,
-	-- so we only match to prefix that identifies rack type.
+	-- Fallback: Match on sprite index from texture atlas
+	-- These are sprite indices in the vegetation_drying_01 texture
 	--
-	-- Tile patterns:
-	-- Small racks (herbs): 20, 225, 236
-	-- Large racks (wheat/barley/rye): 21-35, 224, 237-244
+	-- Tile patterns (observed from game):
+	-- Small racks (herbs): 8, 9, 224, 225, 236
+	-- Large racks (wheat/barley/rye): 20, 21, 22, 23, 237, 238, 239
 	local prefix = ""
 	if nameNormalized:find("vegetation_drying_01_") then
 		prefix = nameNormalized:match("vegetation_drying_01_(%d+)")
@@ -91,10 +94,10 @@ function DryingRackUtils.getRackInfo(entity)
  		return "plant", "large"
 	elseif nameNormalized:find("Drying_Rack") and nameNormalized:find("vegetation_drying") then
 		-- Vanilla plant racks: match based on tile prefix
-		-- Small racks (herbs): 20, 225, 236
-		-- Large racks (wheat/barley/rye): 21-35, 224, 237-244
+		-- Small racks (herbs): 8, 9, 224, 225, 236
+		-- Large racks (wheat/barley/rye): 20, 21, 22, 23, 237, 238, 239
 		local tileNum = tonumber(prefix)
-		if tileNum and (tileNum == 20 or tileNum == 225 or tileNum == 236) then
+		if tileNum and (tileNum == 8 or tileNum == 9 or tileNum == 224 or tileNum == 225 or tileNum == 236) then
 			return "plant", "small"
 		elseif tileNum then
 			return "plant", "large"
@@ -106,7 +109,7 @@ function DryingRackUtils.getRackInfo(entity)
 		local spritePrefix = spriteNormalized:match("vegetation_drying_01_(%d+)")
 		print("[DryingRackUtils.getRackInfo] spritePrefix=" .. tostring(spritePrefix))
 		local tileNum = tonumber(spritePrefix)
-		if tileNum and (tileNum == 20 or tileNum == 225 or tileNum == 236) then
+		if tileNum and (tileNum == 8 or tileNum == 9 or tileNum == 224 or tileNum == 225 or tileNum == 236) then
 			return "plant", "small"
 		elseif tileNum then
 			return "plant", "large"
