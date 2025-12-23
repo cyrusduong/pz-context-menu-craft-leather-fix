@@ -3,6 +3,6 @@ id=ContextMenuCraftLeather
 description=Adds context menu options to drying racks for instant processing of wet furred leather into dried leather. Supports all vanilla leather types with proper rack size validation.
 author=keyreaper
 activateon=startup
-poster=poster.png
+poster=preview.png
 tags=Build 41
 versionMin=41.0
