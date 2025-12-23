@@ -1,0 +1,13 @@
+version=1
+title=Context Menu Craft Leather Fix - Build 42 MP
+description=A Project Zomboid Build 42 fix for broken leather crafting mechanics.
+description=
+description=Adds context menu options to drying racks for instant processing of wet furred leather into dried leather. Supports all 20 vanilla leather types with proper rack size validation.
+description=
+description=Full Multiplayer support for B42.
+description=
+description=[url=https://github.com/cyrusduong/pz-context-menu-craft-leather-fix]GitHub Repository[/url]
+description=
+description=Note: This is a temporary fix mod intended to restore functionality until the official Build 42 crafting system is fully stabilized.
+tags=Build 42
+visibility=unlisted

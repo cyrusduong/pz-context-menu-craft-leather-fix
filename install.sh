@@ -33,10 +33,11 @@ cp -r "$PROJECT_ROOT/Contents" "$TARGET_DIR/"
 echo "Cleaning up Contents root..."
 rm -f "$TARGET_DIR/Contents/preview.png"
 
-# 5. Copy preview.png and mod.info to the workshop root (Workshop uploader requirement)
-echo "Copying preview.png and mod.info to workshop root..."
+# 5. Copy preview.png, mod.info and workshop.txt to the workshop root
+echo "Copying preview.png, mod.info and workshop.txt to workshop root..."
 cp "$PROJECT_ROOT/Contents/mods/LeatherDryingRack/preview.png" "$TARGET_DIR/preview.png"
 cp "$PROJECT_ROOT/Contents/mods/LeatherDryingRack/mod.info" "$TARGET_DIR/mod.info"
+cp "$PROJECT_ROOT/workshop.txt" "$TARGET_DIR/workshop.txt"
 
 echo "Installation complete!"
 echo "Target directory: $TARGET_DIR"
