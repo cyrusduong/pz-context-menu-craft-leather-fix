@@ -33,7 +33,6 @@ DryingRackData_Plants = {
 			"Base.BarleySheaf",
 			"Base.RyeSheaf",
 			"Base.OatsSheaf",
-			"Base.Flax",
 			"Base.GrassTuft",
 		},
 		outputs = {
@@ -41,7 +40,6 @@ DryingRackData_Plants = {
 			"Base.BarleySheafDried",
 			"Base.RyeSheafDried",
 			"Base.OatsSheafDried",
-			"Base.FlaxDried",
 			"Base.HayTuft",
 		},
 	},

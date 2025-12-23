@@ -18,14 +18,67 @@ A Project Zomboid Build 42 mod that fixes broken drying rack mechanics for both 
 
 ## Supported Items
 
-### Leather (20 types)
-- **Small**: Rabbit, Piglet, Fawn, Lamb, Calf, Crude Small.
-- **Medium**: Pig, Sheep, Crude Medium.
-- **Large**: Deer, Cow, Crude Large.
+<details>
+<summary>Leather (20 types)</summary>
 
-### Plants & Grains
-- **Small Rack (Herbs)**: Tobacco, Basil, Oregano, Rosemary, Sage, Thyme, Mint, Black Sage, Plantain.
-- **Large Rack (Grains)**: Wheat, Barley, Rye, Oats, Flax, Grass (converts to Hay).
+### Small Rack
+- `Base.Leather_Crude_Small_Tan_Wet` -> `Base.Leather_Crude_Small_Tan`
+- `Base.CalfLeather_Angus_Fur_Tan_Wet` -> `Base.CalfLeather_Angus_Fur_Tan`
+- `Base.CalfLeather_Holstein_Fur_Tan_Wet` -> `Base.CalfLeather_Holstein_Fur_Tan`
+- `Base.CalfLeather_Simmental_Fur_Tan_Wet` -> `Base.CalfLeather_Simmental_Fur_Tan`
+- `Base.FawnLeather_Fur_Tan_Wet` -> `Base.FawnLeather_Fur_Tan`
+- `Base.LambLeather_Fur_Tan_Wet` -> `Base.LambLeather_Fur_Tan`
+- `Base.PigletLeather_Landrace_Fur_Tan_Wet` -> `Base.PigletLeather_Landrace_Fur_Tan`
+- `Base.PigletLeather_Black_Fur_Tan_Wet` -> `Base.PigletLeather_Black_Fur_Tan`
+- `Base.RabbitLeather_Fur_Tan_Wet` -> `Base.RabbitLeather_Fur_Tan`
+- `Base.RabbitLeather_Grey_Fur_Tan_Wet` -> `Base.RabbitLeather_Grey_Fur_Tan`
+- `Base.RaccoonLeather_Grey_Fur_Tan_Wet` -> `Base.RaccoonLeather_Grey_Fur_Tan`
+
+### Medium Rack
+- `Base.Leather_Crude_Medium_Tan_Wet` -> `Base.Leather_Crude_Medium_Tan`
+- `Base.SheepLeather_Fur_Tan_Wet` -> `Base.SheepLeather_Fur_Tan`
+- `Base.PigLeather_Landrace_Fur_Tan_Wet` -> `Base.PigLeather_Landrace_Fur_Tan`
+- `Base.PigLeather_Black_Fur_Tan_Wet` -> `Base.PigLeather_Black_Fur_Tan`
+
+### Large Rack
+- `Base.Leather_Crude_Large_Tan_Wet` -> `Base.Leather_Crude_Large_Tan`
+- `Base.CowLeather_Angus_Fur_Tan_Wet` -> `Base.CowLeather_Angus_Fur_Tan`
+- `Base.CowLeather_Holstein_Fur_Tan_Wet` -> `Base.CowLeather_Holstein_Fur_Tan`
+- `Base.CowLeather_Simmental_Fur_Tan_Wet` -> `Base.CowLeather_Simmental_Fur_Tan`
+- `Base.DeerLeather_Fur_Tan_Wet` -> `Base.DeerLeather_Fur_Tan`
+</details>
+
+<details>
+<summary>Plants & Grains (15 types)</summary>
+
+### Small Rack (Herbs)
+- `Base.Tobacco` -> `Base.TobaccoDried`
+- `Base.Basil` -> `Base.BasilDried`
+- `Base.Oregano` -> `Base.OreganoDried`
+- `Base.Rosemary` -> `Base.RosemaryDried`
+- `Base.Sage` -> `Base.SageDried`
+- `Base.Thyme` -> `Base.ThymeDried`
+- `Base.MintHerb` -> `Base.MintHerbDried`
+- `Base.BlackSage` -> `Base.BlackSageDried`
+- `Base.Plantain` -> `Base.PlantainDried`
+
+### Large Rack (Grains & Fibers)
+- `Base.WheatSheaf` -> `Base.WheatSheafDried`
+- `Base.BarleySheaf` -> `Base.BarleySheafDried`
+- `Base.RyeSheaf` -> `Base.RyeSheafDried`
+- `Base.OatsSheaf` -> `Base.OatsSheafDried`
+- `Base.GrassTuft` -> `Base.HayTuft`
+</details>
+
+## Technical Details
+
+### Sprite IDs (vegetation_drying_01)
+For contributors and debugging, the following sprite indices are supported for plant racks:
+- **Small:** `0, 1, 8, 9, 216, 217, 224, 225` (Standard & Simple)
+- **Large:** `16-23, 232-239` (Standard & Simple)
+- **Leather:** `crafted_05` indices `74, 75` (Small), `108-111` (Medium), `80-87` (Large)
+
+Reference: [Large Rack](https://pzwiki.net/wiki/Large_Plant_Drying_Rack), [Small Rack](https://pzwiki.net/wiki/Small_Plant_Drying_Rack), [Simple Small](https://pzwiki.net/wiki/Simple_Small_Plant_Drying_Rack), [Simple Large](https://pzwiki.net/wiki/Simple_Large_Plant_Drying_Rack)
 
 ## Usage
 

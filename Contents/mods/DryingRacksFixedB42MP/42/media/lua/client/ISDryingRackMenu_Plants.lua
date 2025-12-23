@@ -189,21 +189,31 @@ function ISDryingRackMenu_Plants.OnFillWorldObjectContextMenu(player, context, w
  				)
  			end
 
- 			for _, plant in ipairs(compatiblePlants) do
- 				local label = plant.item:getName()
- 				print("[ISDryingRackMenu_Plants] Adding individual option: " .. label)
- 				subMenu:addOption(label, rack, ISDryingRackMenu_Plants.dryPlant, playerObj, plant, rack)
- 			end
+  			for _, plant in ipairs(compatiblePlants) do
+  				local label = plant.item:getName()
+  				print("[ISDryingRackMenu_Plants] Adding individual option: " .. label)
+  				subMenu:addOption(label, playerObj, ISDryingRackMenu_Plants.dryPlant, plant, rack)
+  			end
 
- 			for _, plant in ipairs(incompatiblePlants) do
- 				local label = plant.item:getName()
- 				print("[ISDryingRackMenu_Plants] Adding disabled option: " .. label .. " (Rack too small)")
- 				local option = subMenu:addOption(label .. " (Rack too small)", rack, nil)
- 				option.notAvailable = true
- 				option.toolTip = ISWorldObjectContextMenu.addToolTip()
- 				option.toolTip:setName("Rack Too Small")
- 				option.toolTip.description = "This plant requires a " .. plant.size .. " drying rack, but this is a " .. rackSize .. " rack."
- 			end
+			for _, plant in ipairs(incompatiblePlants) do
+				local label = plant.item:getName()
+				local weights = { small = 1, large = 3 }
+				local plantWeight = weights[plant.size] or 0
+				local rackWeight = weights[rackSize] or 0
+				local rackTooSmall = plantWeight > rackWeight
+				local statusText = rackTooSmall and " (Rack too small)" or " (Rack too large)"
+				local toolTipName = rackTooSmall and "Rack Too Small" or "Rack Too Large"
+				print("[ISDryingRackMenu_Plants] Adding disabled option: " .. label .. statusText)
+				local option = subMenu:addOption(label .. statusText, rack, nil)
+				option.notAvailable = true
+				option.toolTip = ISWorldObjectContextMenu.addToolTip()
+				option.toolTip:setName(toolTipName)
+				option.toolTip.description = "This plant requires a "
+					.. plant.size
+					.. " drying rack, but this is a "
+					.. rackSize
+					.. " rack."
+			end
  		end
  	end
 

@@ -88,12 +88,17 @@ function DryingRackUtils.getRackInfo(entity)
 			print("[DryingRackUtils.getRackInfo] matched plant pattern: " .. s .. " -> prefix=" .. tostring(prefix))
 			local tileNum = tonumber(prefix)
 			if tileNum then
-				-- Indices mapping for 'vegetation_drying_01' sheet:
-				-- Small racks (herbs): 8, 9, 224, 225
-				-- Large racks (wheat/barley/rye): 20, 21, 22, 23, 236, 237, 238, 239
-				if tileNum == 8 or tileNum == 9 or tileNum == 224 or tileNum == 225 then
+				-- Indices mapping for 'vegetation_drying_01' sheet based on PZWiki:
+				-- Small Plant Drying Rack: 0, 1 (Wait, wiki says 0,1 but we also see 8,9 in common use)
+				-- Large Plant Drying Rack: 16, 17, 18, 19 (Wiki says 17)
+				-- Simple Small Plant Drying Rack: 216, 217, 224, 225
+				-- Simple Large Plant Drying Rack: 232, 233, 234, 235, 236, 237, 238, 239
+
+				-- Small:
+				if tileNum == 0 or tileNum == 1 or tileNum == 8 or tileNum == 9 or tileNum == 216 or tileNum == 217 or tileNum == 224 or tileNum == 225 then
 					return "plant", "small"
-				elseif tileNum == 236 or tileNum == 237 or tileNum == 238 or tileNum == 239 or tileNum == 20 or tileNum == 21 or tileNum == 22 or tileNum == 23 then
+				-- Large:
+				elseif (tileNum >= 16 and tileNum <= 23) or (tileNum >= 232 and tileNum <= 239) then
 					return "plant", "large"
 				else
 					return "plant", "large"

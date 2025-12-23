@@ -23,5 +23,5 @@ Full Multiplayer support.
 [img]https://raw.githubusercontent.com/cyrusduong/project-zomboid-drying-racks-fixed-b42-mp/main/media/screenshots/leather_drying_rack_ui.png[/img]
 [img]https://raw.githubusercontent.com/cyrusduong/project-zomboid-drying-racks-fixed-b42-mp/main/media/screenshots/leather_drying_rack_action.png[/img]
 "
-								"changenote"		"* fix: restore drying rack functionality for B42 MP with improved UX and feedback,* docs: add leather drying rack UI screenshot to README and workshop VDF,* chore: improve type safety, documentation, and development environment configuration,* Merge pull request #1 from cyrusduong/fix-path-and-craft,* bug fixes"
+									"changenote"		"Fix logic for plant/leather menus, remove Flax from registry, improve sprite detection, and update documentation."
 }

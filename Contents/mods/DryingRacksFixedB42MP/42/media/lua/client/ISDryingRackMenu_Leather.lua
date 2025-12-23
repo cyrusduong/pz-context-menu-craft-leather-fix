@@ -214,7 +214,10 @@ function ISDryingRackMenu_Leather.OnFillWorldObjectContextMenu(player, context, 
 
 			for _, leather in ipairs(incompatibleLeathers) do
 				local label = leather.item:getName()
-				local rackTooSmall = leather.size < rackSize
+				local weights = { small = 1, medium = 2, large = 3 }
+				local leatherWeight = weights[leather.size] or 0
+				local rackWeight = weights[rackSize] or 0
+				local rackTooSmall = leatherWeight > rackWeight
 				local statusText = rackTooSmall and " (Rack too small)" or " (Rack too large)"
 				local toolTipName = rackTooSmall and "Rack Too Small" or "Rack Too Large"
 				print("[ISDryingRackMenu_Leather] Adding disabled option: " .. label .. statusText)
