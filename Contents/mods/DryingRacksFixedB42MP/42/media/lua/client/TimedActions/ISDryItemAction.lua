@@ -39,8 +39,9 @@ function ISDryItemAction:perform()
 	self.item:setJobDelta(0.0)
 
 	-- We cannot store getInventory() in an variable since each method call will invalidate it
-	self.character:getInventory():AddItem(self.outputType)
+	local added = self.character:getInventory():AddItem(self.outputType)
 	self.character:getInventory():Remove(self.item)
+	sendReplaceItemInContainer(self.character:getInventory(), self.item, added)
 
 	-- Feedback
 	if self.character:isLocalPlayer() then
