@@ -1,14 +1,14 @@
 # DryingRacksFixed B42 MP
 
-A Project Zomboid Build 42 mod that fixes broken drying rack mechanics for both **Leather** and **Plants** (Herbs/Tobacco). It provides immersive Timed Actions via the context menu to process wet items into dried versions.
+A Project Zomboid Build 42 mod that fixes broken drying rack mechanics for both **Leather** and **Plants** (Herbs/Tobacco). It adds "Dry Leather" and "Dry Herbs" context menu options directly to world drying racks, allowing you to process wet items into their dried versions.
 
 > **Note**: This is a temporary fix mod intended to restore drying functionality in Build 42 (especially for Multiplayer) until the official passive drying system is fully implemented and fixed by the developers.
 
 ## Features
 
 - **Multi-Category Support**: Fixes drying for both Leather and Plant/Herb drying racks.
+- **Context Menu Integration**: Right-click any compatible rack to see "Dry Leather" or "Dry Herbs" options.
 - **Strict Size Matching**: Enforces 1:1 item-to-rack size requirements (e.g., Medium Leather requires a Medium Drying Rack).
-- **Immersive Timed Actions**: Uses standard character animations and progress bars instead of instant transformation.
 - **Multiplayer Compatible**: Full Build 42 MP support with proper synchronization.
 - **Modular Design**: Extensible registry system for adding new items or categories.
 
@@ -27,7 +27,9 @@ A Project Zomboid Build 42 mod that fixes broken drying rack mechanics for both 
 
 1. **Obtain a Rack**: Craft or find a Drying Rack (Leather) or Herb Drying Rack.
 2. **Have Materials**: Carry wet leather or fresh herbs in your inventory.
-3. **Right-Click**: Right-click the rack and select the "Dry [Category] on [Rack Name]" option.
+3. **Right-Click**: Right-click the rack and select the **"Dry Leather"** or **"Dry Herbs"** option. 
+   - A submenu will appear listing all compatible items in your inventory.
+   - Items that require a larger rack will appear disabled with a tooltip explaining the requirement.
 4. **Action**: Your character will walk to the rack and perform a timed action to dry the items.
 
 ## Installation
