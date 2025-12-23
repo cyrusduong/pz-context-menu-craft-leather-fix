@@ -4,6 +4,7 @@
 -- Import Umbrella types for Project Zomboid API
 require("ISUI/ISContextMenu")
 require("LeatherDryingRackData")
+require("TimedActions/ISDryLeatherAction")
 
 ---@class ISLeatherDryingRackMenu
 ISLeatherDryingRackMenu = {}
@@ -37,28 +38,15 @@ function ISLeatherDryingRackMenu.getWetLeatherItems(player)
 	return LeatherDryingRackUtils.getWetLeatherItems(player)
 end
 
--- Perform leather drying
+-- Perform leather drying (via TimedAction)
 ---@param player IsoPlayer
 ---@param wetLeatherData table
 ---@param rack IsoObject
 function ISLeatherDryingRackMenu.dryLeather(player, wetLeatherData, rack)
-	local inventory = player:getInventory()
-	local wetItem = wetLeatherData.item
-
-	-- Remove wet leather from inventory
-	inventory:Remove(wetItem)
-
-	-- Add dried leather to inventory
-	local driedItem = inventory:AddItem(wetLeatherData.outputType)
-
-	-- Sync for multiplayer
-	if sendAddItemToContainer then
-		sendAddItemToContainer(inventory, driedItem)
-	end
-
-	-- Show feedback message
-	if player.Say then
-		player:Say("Dried " .. wetItem:getDisplayName() .. " on " .. rack:getDisplayName())
+	if luautils.walkAdj(player, rack:getSquare()) then
+		ISTimedActionQueue.add(
+			ISDryLeatherAction:new(player, wetLeatherData.item, wetLeatherData.outputType, rack, 100)
+		)
 	end
 end
 
@@ -67,21 +55,10 @@ end
 ---@param compatibleLeathers table
 ---@param rack IsoObject
 function ISLeatherDryingRackMenu.dryAll(player, compatibleLeathers, rack)
-	local count = 0
-	local inventory = player:getInventory()
-
-	for _, leatherData in ipairs(compatibleLeathers) do
-		inventory:Remove(leatherData.item)
-		local driedItem = inventory:AddItem(leatherData.outputType)
-
-		if sendAddItemToContainer then
-			sendAddItemToContainer(inventory, driedItem)
+	if luautils.walkAdj(player, rack:getSquare()) then
+		for _, leatherData in ipairs(compatibleLeathers) do
+			ISTimedActionQueue.add(ISDryLeatherAction:new(player, leatherData.item, leatherData.outputType, rack, 100))
 		end
-		count = count + 1
-	end
-
-	if player.Say and count > 0 then
-		player:Say("Dried " .. count .. " leather items on " .. rack:getDisplayName())
 	end
 end
 
@@ -104,43 +81,92 @@ function ISLeatherDryingRackMenu.OnFillWorldObjectContextMenu(player, context, w
 		return false
 	end
 
-	-- Find drying rack objects
+	-- Find drying rack objects first to avoid spamming on every click
 	local dryingRacks = {}
-	for i, obj in ipairs(worldobjects) do
-		local entityObj = obj.getEntity and obj:getEntity()
-		local entityName = entityObj and entityObj:getDefinitionName() or ""
-		local name = obj:getName() or ""
+	local seenSquares = {}
+	local seenSizes = {}
+	
+	if #worldobjects > 0 then
+		for i = 1, #worldobjects do
+			local rootObj = worldobjects[i]
+			local square = rootObj.getSquare and rootObj:getSquare()
+			if square then
+				local sqKey = square:getX() .. "," .. square:getY() .. "," .. square:getZ()
+				if not seenSquares[sqKey] then
+					seenSquares[sqKey] = true
+					local sqObjs = square:getObjects()
+					if sqObjs then
+						for j = 0, sqObjs:size() - 1 do
+							local obj = sqObjs:get(j)
+							local entityObj = obj.getEntity and obj:getEntity()
+							local entityName = "NONE"
+							if entityObj then
+								if entityObj.getFullType then
+									entityName = entityObj:getFullType()
+								elseif entityObj.getEntityFullTypeDebug then
+									entityName = entityObj:getEntityFullTypeDebug()
+								end
+							end
+							
+							local name = obj:getName() or "UNNAMED"
+							local spriteName = (obj:getSprite() and obj:getSprite():getName()) or "NO_SPRITE"
+							
+							-- Match against any variation of DryingRack
+							local isMatch = false
+							if string.find(entityName, "DryingRack") 
+								or string.find(entityName, "Drying_Rack")
+								or string.find(name, "DryingRack")
+								or string.find(name, "Drying_Rack")
+								or string.find(name, "Drying Rack")
+								or string.find(spriteName, "drying_rack")
+								or string.find(spriteName, "crafted_05") -- B42 crafted rack sprite range
+							then
+								isMatch = true
+							end
 
-		if
-			string.find(entityName, "DryingRack")
-			or string.find(name, "Drying_Rack")
-			or string.find(name, "Drying Rack")
-		then
-			table.insert(dryingRacks, obj)
+							if isMatch then
+								local rackType = ISLeatherDryingRackMenu.getRackType(obj)
+								if not seenSizes[rackType] then
+									seenSizes[rackType] = true
+									table.insert(dryingRacks, obj)
+								end
+							end
+						end
+					end
+				end
+			end
 		end
 	end
 
+	-- If no racks found, exit silently
 	if #dryingRacks == 0 then
 		return
 	end
 
-	-- Get wet leather items from player inventory
+	-- Now that we know we clicked a rack, check for leather
 	local wetLeatherItems = ISLeatherDryingRackMenu.getWetLeatherItems(playerObj)
+
 	if #wetLeatherItems == 0 then
+		if HaloTextHelper then
+			HaloTextHelper.addText(playerObj, "I need wet leather to use this rack.", HaloTextHelper.getBadColor())
+		end
 		return
 	end
 
 	-- Process each drying rack
 	for _, rack in ipairs(dryingRacks) do
+		-- Use a slightly larger distance for the context menu to appear, 
+		-- the TimedAction will handle walking to the exact spot.
 		if ISLeatherDryingRackMenu.isPlayerNearRack(playerObj, rack) then
 			local rackType = ISLeatherDryingRackMenu.getRackType(rack)
+			local rackLabel = rackType:gsub("^%l", string.upper) -- capitalize
 			local compatibleSizes = ISLeatherDryingRackMenu.getCompatibleSizes(rackType)
-
+			
 			-- Create main option for this rack
-			local rackOption = context:addOptionOnTop("Dry Leather", worldobjects, nil)
+			local rackOption = context:addOptionOnTop("Dry Leather on " .. rackLabel .. " Rack", worldobjects, nil)
 			local subMenu = ISContextMenu:getNew(context)
 			context:addSubMenu(rackOption, subMenu)
-
+			
 			local compatibleLeathers = {}
 			local incompatibleLeathers = {}
 
@@ -152,7 +178,7 @@ function ISLeatherDryingRackMenu.OnFillWorldObjectContextMenu(player, context, w
 					table.insert(incompatibleLeathers, leatherData)
 				end
 			end
-
+			
 			-- Add "Dry All" if multiple compatible items
 			if #compatibleLeathers > 1 then
 				subMenu:addOption(
@@ -162,7 +188,6 @@ function ISLeatherDryingRackMenu.OnFillWorldObjectContextMenu(player, context, w
 					compatibleLeathers,
 					rack
 				)
-				-- Add a spacer if possible, or just the list
 			end
 
 			-- Add compatible leather options
@@ -178,7 +203,7 @@ function ISLeatherDryingRackMenu.OnFillWorldObjectContextMenu(player, context, w
 				-- Add tooltip with leather info
 				option.toolTip = ISWorldObjectContextMenu.addToolTip()
 				option.toolTip:setName("Dry Leather")
-				option.toolTip.description = "Transforms wet furred leather into dried leather using this drying rack.\\n\\nOutput: "
+				option.toolTip.description = "Transforms wet furred leather into dried leather using this drying rack. <LINE> Output: "
 					.. leatherData.item:getDisplayName():gsub("Wet", "Dried")
 			end
 

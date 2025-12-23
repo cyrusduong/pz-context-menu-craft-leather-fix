@@ -80,18 +80,26 @@ end
 function LeatherDryingRackUtils.getRackType(entity)
 	-- Check for B42 Entity names
 	local entityObj = entity.getEntity and entity:getEntity()
-	local entityName = entityObj and entityObj:getDefinitionName()
+	local entityName = ""
+	if entityObj then
+		if entityObj.getFullType then
+			entityName = entityObj:getFullType()
+		elseif entityObj.getEntityFullTypeDebug then
+			entityName = entityObj:getEntityFullTypeDebug()
+		end
+	end
 
-	if entityName == "Base.ES_DryingRackSmall" then
+	local name = entity:getName() or ""
+	
+	if entityName == "Base.ES_DryingRackSmall" or entityName == "Base.DryingRackSmall" or name == "DryingRackSmall" then
 		return "small"
-	elseif entityName == "Base.ES_DryingRackMedium" then
+	elseif entityName == "Base.ES_DryingRackMedium" or entityName == "Base.DryingRackMedium" or name == "DryingRackMedium" then
 		return "medium"
-	elseif entityName == "Base.ES_DryingRackLarge" then
+	elseif entityName == "Base.ES_DryingRackLarge" or entityName == "Base.DryingRackLarge" or name == "DryingRackLarge" then
 		return "large"
 	end
 
 	-- Fallback to name check for older versions or modded racks
-	local name = entity:getName() or ""
 	if
 		string.find(name, "Simple_Drying_Rack")
 		or string.find(name, "Herb_Drying_Rack")
