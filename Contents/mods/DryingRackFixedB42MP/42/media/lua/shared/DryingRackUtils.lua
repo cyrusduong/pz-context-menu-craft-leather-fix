@@ -84,14 +84,13 @@ function DryingRackUtils.getRackInfo(entity)
 			print("[DryingRackUtils.getRackInfo] matched pattern in string: " .. s .. " -> prefix=" .. tostring(prefix))
 			local tileNum = tonumber(prefix)
 			if tileNum then
-				if tileNum == 8 or tileNum == 9 or tileNum == 224 or tileNum == 225 or tileNum == 236 then
-					-- Index 236 is actually the "Simple Herb Drying Rack" (Small)
+				if tileNum == 8 or tileNum == 9 or tileNum == 224 or tileNum == 225 then
 					return "plant", "small"
-				elseif tileNum == 20 or tileNum == 21 or tileNum == 22 or tileNum == 23 or tileNum == 237 or tileNum == 238 or tileNum == 239 then
-					-- These are explicitly Large racks
+				elseif tileNum == 236 or tileNum == 237 or tileNum == 238 or tileNum == 239 or tileNum == 20 or tileNum == 21 or tileNum == 22 or tileNum == 23 then
+					-- Index 236 is the "Simple Large Plant Drying Rack" based on User feedback
 					return "plant", "large"
 				else
-					-- Fallback for other indices in this sheet
+					-- Default to large for any other index in this sheet
 					return "plant", "large"
 				end
 			end
