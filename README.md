@@ -6,6 +6,8 @@ A Project Zomboid Build 42 mod that fixes broken drying rack mechanics for both 
 
 > **Note**: This is a temporary fix mod intended to restore drying functionality in Build 42 (especially for Multiplayer) until the official passive drying system is fully implemented and fixed by the developers.
 
+[Steam workshop link](https://steamcommunity.com/sharedfiles/filedetails/comments/3629422471)
+
 ## Screenshots
 
 ![Leather Drying Rack UI](https://raw.githubusercontent.com/cyrusduong/project-zomboid-drying-racks-fixed-b42-mp/main/media/screenshots/leather_drying_rack_ui.png)
