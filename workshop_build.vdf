@@ -5,10 +5,39 @@
 	"contentfolder"		"/Users/cduong/Zomboid/Workshop/DryingRacksFixedB42MP/Contents"
 	"previewfile"		"/Users/cduong/Zomboid/Workshop/DryingRacksFixedB42MP/preview.png"
 	"visibility"		"0"
-	"title"		"DryingRacksFixed B42 MP"
+ 	"title"		"DryingRacksFixed B42 MP"
 	"description"		"A Project Zomboid Build 42 fix for broken drying rack mechanics (Leather and Plants).
 
 This is a temporary MP-compatible stop-gap until the passive drying UI is finalized by the developers. Adds [b]Dry Leather[/b] and [b]Dry Herbs[/b] context menu options to drying racks for processing items. Supports all vanilla leather types and various herbs/tobacco with strict rack size validation.
+
+[b]Supported Recipes:[/b]
+
+[b]Leather (Small Rack):[/b]
+* Small Crude Leather, Calf Leather (Angus/Holstein/Simmental)
+* Fawn Leather, Lamb Leather
+* Piglet Leather (Landrace/Black)
+* Rabbit Leather (Grey), Raccoon Leather
+
+[b]Leather (Medium Rack):[/b]
+* Medium Crude Leather, Sheep Leather
+* Pig Leather (Landrace/Black)
+
+[b]Leather (Large Rack):[/b]
+* Large Crude Leather, Cow Leather (Angus/Holstein/Simmental)
+* Deer Leather
+
+[b]Plants & Herbs (Small Rack):[/b]
+* Tobacco, Basil, Oregano, Rosemary, Sage, Thyme
+* MintHerb, BlackSage, Plantain
+* Chamomile, Chives, Cilantro, Marigold, Parsley
+* Comfrey, CommonMallow, WildGarlic
+* Peppers (Jalapeno/Habanero), Greenpeas, Soybeans
+* Roses, Lavender, PoppyPods, Hops, GrassTuft
+
+[b]Plants & Herbs (Large Rack):[/b]
+* Wheat, Barley, Rye, Oats Sheaves
+* Corn, Sunflower Head
+* Flax, Hemp Bundle, GrassTuft
 
 Full Multiplayer support.
 
@@ -22,6 +51,6 @@ Full Multiplayer support.
 
 [img]https://raw.githubusercontent.com/cyrusduong/project-zomboid-drying-racks-fixed-b42-mp/main/media/screenshots/leather_drying_rack_ui.png[/img]
 [img]https://raw.githubusercontent.com/cyrusduong/project-zomboid-drying-racks-fixed-b42-mp/main/media/screenshots/leather_drying_rack_action.png[/img]
-"
-														"changenote"		"* vdf,* Add support for drying Corn and other missing B42 plants/herbs,* docs: update release notes, vdf"
+ "
+ 														"changenote"		"* docs: add complete list of all supported recipes to workshop description"
 }
